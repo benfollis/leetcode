@@ -6,7 +6,7 @@ class SnapshotArray
 =end
   def initialize(length)
     @snapshot_id = 0
-    @store = Array.new(length, 0)
+    @store = {}
     @snapshots = Array.new
   end
 
@@ -20,14 +20,13 @@ class SnapshotArray
     @store[index] = val
   end
 
-
 =begin
     :rtype: Integer
 =end
   def snap()
     @snapshots << @store.clone
     @snapshot_id += 1
-    return @snapshot_id-1;
+    return @snapshot_id-1
   end
 
 
@@ -37,7 +36,7 @@ class SnapshotArray
     :rtype: Integer
 =end
   def get(index, snap_id)
-    return @snapshots[snap_id][index]
+    return @snapshots[snap_id][index] || 0
   end
 
 end
