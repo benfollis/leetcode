@@ -1,8 +1,4 @@
-#this is a straightforward dynamic problem bottom up computation
-# problem
-# @param {Integer[]} arr
-# @param {Integer[][]} queries
-# @return {Integer[]}
+
 def print_matrix(matrix)
   puts "----------"
   matrix.each do |row|
@@ -10,33 +6,33 @@ def print_matrix(matrix)
   end
   puts "----------"
 end
+#this is a straightforward dynamic problem bottom up computation
+# problem
+# @param {Integer[]} arr
+# @param {Integer[][]} queries
+# @return {Integer[]}
 def xor_queries(arr, queries)
-  #the data array data_i_j contians the result of the xor of data[i], data[i+i]...data[j]
-  # initialize
-  data = Array.new(arr.size){ Array.new(arr.size,0) }
-  # for the loop, we'll make arr[i] ^ arra[i] = arr[i]
-  # as then we don't drop it from the cumulative,
-  # note the problem doesn't really follow xor since arr[x] ^ arr[x] = 0
-  # but in the tests they say arr[x] ^ array[x] = arr[x]
-  arr.size.times do |x|
-    data[x][x] = arr[x]
-   end
-  #print_matrix(data);
-
-  arr.size.times do |i|
-    (i+1..arr.size-1).each do |j|
-      # puts "I #{i} J #{j}"
-      previous = data[i][j-1] || 0
-      data[i][j] = previous ^ arr[j]
-        #  print_matrix(data)
+  # each element j in data will contain
+  # arr[0] ^ arr[1]... arr[j] (that is the xor of all elements up to j)
+  # then any query of i,j can be computed by data[j] ^ data[i]
+  data = Array.new(arr.size)
+  arr.each_with_index do |elem, index|
+    if (index == 0) then
+      data[index] = elem
+    else
+      data[index] = data[index-1] ^ elem
     end
   end
-  # in true xor def we'd fix up the diagonals
-  #arr.size.times {|x| data[x][x] = 0}
-  #print_matrix(data)
   return queries.map do |query|
     i, j = query
-    data[i][j]
+    if i==j then
+      #this is fubar x ^ x should be 0
+      arr[i]
+    elsif i == 0 then
+      data[j]
+    else
+      data[i-1] ^ data[j]
+    end
   end
 end
 
