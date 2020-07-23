@@ -82,7 +82,7 @@ end
 # obj = LFUCache.new(capacity)
 # param_1 = obj.get(key)
 # obj.put(key, value)
-cache = LFUCache.new(3)
+cache = LRUCache.new(3)
 puts cache.get(:x)
 cache.put(:x, 1)
 cache.put(:x, 3)
